@@ -52,9 +52,7 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
       etapie, który poszerza API (5. node-graph, 8. scene/object model), żeby ściąga nie
       wyszła z synchronizacji z tym, co faktycznie jest dostępne w skrypcie.
       Commit: `feat: API cheatsheet key`
-- [ ] **5. Node-graph panel (fork CodeWire)** — **kod gotowy, NIEZACOMMITOWANY jeszcze**
-      (`git status` czysty od commita `21ec52e` — całość poniżej leży w working tree).
-      Przed commitem: ostatnia runda testów na telefonie (patrz niżej) i `git add`/`git commit`.
+- [x] **5. Node-graph panel (fork CodeWire)** — zacommitowane (`13d8560`).
 
       **Co zrobione:**
       - Próba 1 (LiteGraph.js) porzucona — zero obsługi dotyku w bibliotece, patrz wyżej.
@@ -90,9 +88,20 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
         tekstowe grafu i tak odpalają natywną klawiaturę telefonu; zajmowała połowę ekranu).
       - `litegraph.js` odinstalowane z npm, `public/vendor/litegraph.*` usunięte.
 
-      **Do zrobienia przed commitem:** końcowy test na telefonie całego przepływu (Update→FillRect
-      wire→Run rysuje prostokąt), potem `git add`/`git commit -m "feat: node-graph editor with JS
-      codegen"` (zgodnie z konwencją commitów etapów w tym pliku).
+      **Pomysły z dyskusji 2026-10-28, jeszcze nie zaplanowane jako osobny etap:**
+      - **Podgląd wygenerowanego kodu z grafu** — jednokierunkowo (graf→kod), jako doraźny
+        read-only widok (przywrócić coś w duchu oryginalnego panelu „Live Code" z CodeWire,
+        ale on-demand, nie trwały panel zajmujący miejsce). Celowo **nie** auto-nadpisywać
+        zakładki Code tym kodem — zatarłoby granicę źródła prawdy i ryzykowało ciche
+        nadpisanie ręcznie pisanego kodu przy każdym dotknięciu grafu. Dwukierunkowa
+        synchronizacja (parsowanie dowolnego JS z powrotem na graf) odrzucona jako
+        nieopłacalna — to osobny problem klasy "dekompilator".
+      - **Rejestrator własnych typów węzłów** (np. `Player.x`, `Player.Speak()` jako węzły
+        Get/Set/Call) — architektonicznie sensowne (tak działa reflection w Blueprintach), ale
+        zależne od Etapu 8 (model sceny/obiektów), który jeszcze nie istnieje. Kolejność: najpierw
+        minimalny Etap 8, potem rejestrator — najlepiej częściowo automatyczny (czyta właściwości
+        obiektu sceny i sam generuje węzły), nie ręczny panel „zarejestruj nowy węzeł" budowany
+        w oderwaniu od realnego modelu obiektów.
 - [ ] **6. Persystencja projektów** — zapis/odczyt skryptów i grafów do IndexedDB,
       lista "kartridży", przełączanie między nimi.
       Commit: `feat: project persistence via IndexedDB`
