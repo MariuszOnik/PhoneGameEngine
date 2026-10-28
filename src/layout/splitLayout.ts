@@ -1,4 +1,5 @@
 import "./splitLayout.css";
+import { mountCodeEditor } from "../editor/codeEditor";
 
 const SPLIT_STORAGE_KEY = "fc:splitRatio";
 const MIN_RATIO = 0.15;
@@ -19,9 +20,7 @@ export function mountSplitLayout(root: HTMLElement): void {
           <button type="button" class="pane-tab is-active" data-mode="code">Code</button>
           <button type="button" class="pane-tab" data-mode="graph">Node Graph</button>
         </div>
-        <div class="pane-content" id="editor-pane-content">
-          <p class="pane-placeholder">Code editor placeholder</p>
-        </div>
+        <div class="pane-content pane-content--editor" id="editor-pane-content"></div>
       </section>
       <div class="split-divider" id="split-divider" role="separator" aria-orientation="horizontal"></div>
       <section class="split-pane split-pane--bottom" id="keyboard-pane">
@@ -40,6 +39,9 @@ export function mountSplitLayout(root: HTMLElement): void {
   };
 
   applyRatio(loadRatio());
+
+  const editorContent = root.querySelector<HTMLDivElement>("#editor-pane-content")!;
+  mountCodeEditor(editorContent);
 
   const tabs = root.querySelectorAll<HTMLButtonElement>(".pane-tab");
   tabs.forEach((tab) => {

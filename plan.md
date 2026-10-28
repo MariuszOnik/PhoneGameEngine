@@ -38,7 +38,7 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
       (kod lub node-graph, przełączalny), dół = wirtualna klawiatura / panel dotykowy.
       Resizable divider, działa w orientacji portrait na mobile.
       Commit: `feat: vertical split layout shell`
-- [ ] **2. Edytor kodu (CodeMirror 6)** — integracja, podświetlanie JS/TS, własny theme.
+- [x] **2. Edytor kodu (CodeMirror 6)** — integracja, podświetlanie JS/TS, własny theme.
       Commit: `feat: code editor pane`
 - [ ] **3. Własna klawiatura wirtualna** — wstawianie tekstu w pozycję kursora, klawisze
       specjalne (Tab, `{}()[]`, strzałki, Undo/Redo, Escape/zamknij).
