@@ -46,6 +46,11 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
 - [ ] **4. Runtime wykonania kodu** — przycisk "Run", sandbox (np. `Function`/iframe),
       minimalne API Canvas 2D udostępnione skryptowi, przechwytywanie błędów/console do UI.
       Commit: `feat: sandboxed canvas runtime`
+- [ ] **4b. Klawisz "Help" ze ściągą API** — przycisk na klawiaturze wirtualnej otwierający
+      podgląd dostępnego API sandboxa (funkcje/obiekty z etapu 4). Aktualizować przy każdym
+      etapie, który poszerza API (5. node-graph, 8. scene/object model), żeby ściąga nie
+      wyszła z synchronizacji z tym, co faktycznie jest dostępne w skrypcie.
+      Commit: `feat: API cheatsheet key`
 - [ ] **5. Node-graph panel (LiteGraph.js)** — osadzenie LiteGraph jako alternatywnego panelu
       edycji, podstawowe własne typy węzłów (np. `onUpdate`, `moveSprite`, `ifCondition`),
       kompilator grafu → fragment JS/TS wstrzykiwany do runtime z etapu 4.
