@@ -46,7 +46,7 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
 - [x] **4. Runtime wykonania kodu** — przycisk "Run", sandbox (np. `Function`/iframe),
       minimalne API Canvas 2D udostępnione skryptowi, przechwytywanie błędów/console do UI.
       Commit: `feat: sandboxed canvas runtime`
-- [ ] **4b. Klawisz "Help" ze ściągą API** — przycisk na klawiaturze wirtualnej otwierający
+- [x] **4b. Klawisz "Help" ze ściągą API** — przycisk na klawiaturze wirtualnej otwierający
       podgląd dostępnego API sandboxa (funkcje/obiekty z etapu 4). Aktualizować przy każdym
       etapie, który poszerza API (5. node-graph, 8. scene/object model), żeby ściąga nie
       wyszła z synchronizacji z tym, co faktycznie jest dostępne w skrypcie.

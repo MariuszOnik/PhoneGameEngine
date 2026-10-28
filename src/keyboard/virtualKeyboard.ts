@@ -9,6 +9,7 @@ import {
   runRedo,
   blurEditor,
 } from "../editor/codeEditor";
+import { showApiHelp } from "../runtime/apiHelp";
 
 const ROW_NUMBERS = "1234567890".split("");
 const ROW_TOP = "qwertyuiop".split("");
@@ -91,7 +92,8 @@ function buildSymbolsLayout(onToggle: () => void): HTMLDivElement[] {
   const rightKey = makeKey("→", "vk-key--control", () => moveCursor("right"));
   const undoKey = makeKey("Undo", "vk-key--control", runUndo);
   const redoKey = makeKey("Redo", "vk-key--control", runRedo);
-  const controlRow = makeRow([escKey, tabKey, leftKey, upKey, downKey, rightKey, undoKey, redoKey]);
+  const helpKey = makeKey("Help", "vk-key--control", showApiHelp);
+  const controlRow = makeRow([escKey, tabKey, leftKey, upKey, downKey, rightKey, undoKey, redoKey, helpKey]);
 
   return [symbolRow, controlRow, buildActionRow("ABC", onToggle)];
 }

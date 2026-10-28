@@ -1,0 +1,76 @@
+.api-help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.api-help-overlay.is-visible {
+  display: flex;
+}
+
+.api-help-panel {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.api-help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #2a2a2a;
+  font-weight: 600;
+  color: #fff;
+}
+
+.api-help-close {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.api-help-body {
+  padding: 0.6rem 0.8rem;
+  overflow-y: auto;
+  color: #ccc;
+  font-size: 0.85rem;
+}
+
+.api-help-body h3 {
+  color: #7dcfff;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0.8rem 0 0.3rem;
+}
+
+.api-help-body h3:first-child {
+  margin-top: 0;
+}
+
+.api-help-body ul {
+  margin: 0 0 0.3rem;
+  padding-left: 1.1rem;
+}
+
+.api-help-body li {
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 0.78rem;
+  margin: 0.25rem 0;
+  word-break: break-word;
+}
