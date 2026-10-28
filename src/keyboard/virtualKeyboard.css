@@ -1,0 +1,54 @@
+.vk {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 100%;
+  padding: 0.4rem;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.vk-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.vk-key {
+  flex: 1;
+  min-width: 1.5rem;
+  min-height: 2.8rem;
+  border: none;
+  border-radius: 6px;
+  background: #262626;
+  color: #eee;
+  font-family: inherit;
+  font-size: 1rem;
+  touch-action: manipulation;
+}
+
+.vk-key:active {
+  background: #3a3a3a;
+}
+
+.vk-key--symbol {
+  flex: 0 0 auto;
+  width: 2.6rem;
+}
+
+.vk-key--control {
+  flex: 0 0 auto;
+  width: 4rem;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.vk-key--shift.is-active {
+  background: #3a5a7a;
+  color: #fff;
+}
+
+.vk-key--wide {
+  flex: 1;
+  min-height: 3rem;
+}

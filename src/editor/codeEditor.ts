@@ -1,6 +1,20 @@
 import { EditorState } from "@codemirror/state";
-import { EditorView, keymap, lineNumbers, highlightActiveLine } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
+import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection } from "@codemirror/view";
+import {
+  defaultKeymap,
+  history,
+  historyKeymap,
+  indentWithTab,
+  undo,
+  redo,
+  cursorCharLeft,
+  cursorCharRight,
+  cursorLineUp,
+  cursorLineDown,
+  deleteCharBackward,
+  insertNewlineAndIndent,
+  insertTab,
+} from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
 import { bracketMatching, indentOnInput, syntaxHighlighting, HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
@@ -81,9 +95,17 @@ export function mountCodeEditor(root: HTMLElement): EditorView {
       indentOnInput(),
       bracketMatching(),
       highlightActiveLine(),
+      drawSelection(),
       javascript({ typescript: true }),
       syntaxHighlighting(fcHighlightStyle),
       fcEditorTheme,
+      // Suppress the OS soft keyboard — input comes from our own virtual keyboard instead.
+      EditorView.contentAttributes.of({
+        inputmode: "none",
+        autocapitalize: "off",
+        autocorrect: "off",
+        spellcheck: "false",
+      }),
       keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
       EditorView.updateListener.of((update) => {
         if (update.docChanged) {
@@ -99,4 +121,56 @@ export function mountCodeEditor(root: HTMLElement): EditorView {
 
 export function getEditorSource(): string {
   return view?.state.doc.toString() ?? "";
+}
+
+export function insertAtCursor(text: string): void {
+  if (!view) return;
+  const { from, to } = view.state.selection.main;
+  view.dispatch({
+    changes: { from, to, insert: text },
+    selection: { anchor: from + text.length },
+    scrollIntoView: true,
+  });
+}
+
+export function deleteBackward(): void {
+  if (!view) return;
+  deleteCharBackward(view);
+}
+
+export function insertNewline(): void {
+  if (!view) return;
+  insertNewlineAndIndent(view);
+}
+
+export function indentCursor(): void {
+  if (!view) return;
+  insertTab(view);
+}
+
+export function moveCursor(direction: "left" | "right" | "up" | "down"): void {
+  if (!view) return;
+  const command =
+    direction === "left"
+      ? cursorCharLeft
+      : direction === "right"
+        ? cursorCharRight
+        : direction === "up"
+          ? cursorLineUp
+          : cursorLineDown;
+  command(view);
+}
+
+export function runUndo(): void {
+  if (!view) return;
+  undo(view);
+}
+
+export function runRedo(): void {
+  if (!view) return;
+  redo(view);
+}
+
+export function blurEditor(): void {
+  view?.contentDOM.blur();
 }

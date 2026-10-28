@@ -1,5 +1,6 @@
 import "./splitLayout.css";
 import { mountCodeEditor } from "../editor/codeEditor";
+import { mountVirtualKeyboard } from "../keyboard/virtualKeyboard";
 
 const SPLIT_STORAGE_KEY = "fc:splitRatio";
 const MIN_RATIO = 0.15;
@@ -24,9 +25,7 @@ export function mountSplitLayout(root: HTMLElement): void {
       </section>
       <div class="split-divider" id="split-divider" role="separator" aria-orientation="horizontal"></div>
       <section class="split-pane split-pane--bottom" id="keyboard-pane">
-        <div class="pane-content" id="keyboard-pane-content">
-          <p class="pane-placeholder">Virtual keyboard placeholder</p>
-        </div>
+        <div class="pane-content pane-content--keyboard" id="keyboard-pane-content"></div>
       </section>
     </div>
   `;
@@ -42,6 +41,9 @@ export function mountSplitLayout(root: HTMLElement): void {
 
   const editorContent = root.querySelector<HTMLDivElement>("#editor-pane-content")!;
   mountCodeEditor(editorContent);
+
+  const keyboardContent = root.querySelector<HTMLDivElement>("#keyboard-pane-content")!;
+  mountVirtualKeyboard(keyboardContent);
 
   const tabs = root.querySelectorAll<HTMLButtonElement>(".pane-tab");
   tabs.forEach((tab) => {

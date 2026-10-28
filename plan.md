@@ -40,7 +40,7 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
       Commit: `feat: vertical split layout shell`
 - [x] **2. Edytor kodu (CodeMirror 6)** — integracja, podświetlanie JS/TS, własny theme.
       Commit: `feat: code editor pane`
-- [ ] **3. Własna klawiatura wirtualna** — wstawianie tekstu w pozycję kursora, klawisze
+- [x] **3. Własna klawiatura wirtualna** — wstawianie tekstu w pozycję kursora, klawisze
       specjalne (Tab, `{}()[]`, strzałki, Undo/Redo, Escape/zamknij).
       Commit: `feat: custom virtual keyboard`
 - [ ] **4. Runtime wykonania kodu** — przycisk "Run", sandbox (np. `Function`/iframe),
