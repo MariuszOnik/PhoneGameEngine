@@ -29,7 +29,10 @@ const API_SECTIONS: ApiHelpSection[] = [
   },
   {
     title: "Console",
-    items: ["console.log/warn/error(...) — output appears in the panel below the canvas"],
+    items: [
+      "console.log/warn/error(...) — output appears in the panel below the canvas",
+      "avoid calling it every frame inside onUpdate (~60x/sec) — the panel only keeps the last 200 lines, but it's still noisy; log once or on specific events instead",
+    ],
   },
 ];
 

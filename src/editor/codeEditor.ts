@@ -21,8 +21,13 @@ import { tags } from "@lezer/highlight";
 
 const EDITOR_STORAGE_KEY = "fc:editorSource";
 
-const DEFAULT_SOURCE = `function onUpdate(dt) {
-  // write your game logic here
+const DEFAULT_SOURCE = `// Runs once when you press Run.
+console.log("Fantasy Console ready");
+
+// Called every frame — avoid console.log in here, it runs ~60x/sec.
+function onUpdate(dt) {
+  ctx.fillStyle = "#7dcfff";
+  ctx.fillRect(20, 20, 60, 60);
 }
 `;
 
