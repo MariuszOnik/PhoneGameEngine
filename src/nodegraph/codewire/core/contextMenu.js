@@ -45,8 +45,12 @@ export var ContextMenu = {
                 }
             }
         }
+        let deleteMenuOpenedAt = 0;
         function toggleDeleteCtxMenu(location, show) {
             if (show) {
+                // A long-press opens this from a touch; ignore any click the browser may still
+                // synthesize from that same touch, or the popup closes the instant it opens.
+                deleteMenuOpenedAt = Date.now();
                 deleteCtxMenu.classList.toggle("hidden", false);
                 clampToViewport(deleteCtxMenu, location[0], location[1]);
             }
@@ -134,15 +138,66 @@ export var ContextMenu = {
             };
 
         });
+        // Touch long-press → the same 'contextmenu' event the desktop right-click sends.
+        // Konva calls preventDefault() on touchstart over shapes, which stops the browser's own
+        // long-press→contextmenu from ever firing on phones, so the Delete popup was unreachable.
+        // Detect the long-press by hand and fire 'contextmenu' on the touched shape itself, so the
+        // existing handler above sees the real e.target (node child or wire) and just works.
+        const LONG_PRESS_MS = 500;
+        const LONG_PRESS_MOVE_TOLERANCE = 10;
+        let longPress = null;
+        function cancelLongPress() {
+            if (longPress) {
+                clearTimeout(longPress.timer);
+                longPress = null;
+            }
+        }
+        stage.on('touchstart', function (e) {
+            cancelLongPress();
+            const touches = e.evt.touches;
+            if (!touches || touches.length !== 1) return;
+            const target = e.target;
+            if (target === stage) return;
+            const isNodePart = target.getParent() && target.getParent().name() == 'aProgramNodeGroup';
+            const isWire = target.name() == 'isConnection';
+            if (!isNodePart && !isWire) return;
+            const startX = touches[0].clientX;
+            const startY = touches[0].clientY;
+            longPress = {
+                startX,
+                startY,
+                timer: setTimeout(() => {
+                    longPress = null;
+                    // Stop any node drag that may have begun so the node doesn't stick to the finger.
+                    const group = target.getParent();
+                    if (group && group.isDragging && group.isDragging()) group.stopDrag();
+                    if (navigator.vibrate) navigator.vibrate(30);
+                    target.fire('contextmenu', {
+                        evt: { preventDefault() {}, clientX: startX, clientY: startY },
+                    }, true);
+                }, LONG_PRESS_MS),
+            };
+        });
+        stage.on('touchmove', function (e) {
+            if (!longPress) return;
+            const touches = e.evt.touches;
+            if (!touches || touches.length !== 1) { cancelLongPress(); return; }
+            const dx = touches[0].clientX - longPress.startX;
+            const dy = touches[0].clientY - longPress.startY;
+            if (dx * dx + dy * dy > LONG_PRESS_MOVE_TOLERANCE * LONG_PRESS_MOVE_TOLERANCE) cancelLongPress();
+        });
+        stage.on('touchend', cancelLongPress);
+        stage.container().addEventListener('touchcancel', cancelLongPress);
+
         stage.on('click', function (e) {
             toggleContextMenu([e.evt.clientX, e.evt.clientY], false);
-            toggleDeleteCtxMenu([], false);
+            if (Date.now() - deleteMenuOpenedAt > 400) toggleDeleteCtxMenu([], false);
             toggleGetSetCtxMenu([], false);
         });
         document.addEventListener("click", (e) => {
             if (e.target !== stage.getContainer() && e.target !== searchBar)
                 toggleContextMenu([0, 0], false);
-            if (e.target !== stage.getContainer()) {
+            if (e.target !== stage.getContainer() && Date.now() - deleteMenuOpenedAt > 400) {
                 toggleDeleteCtxMenu([], false);
                 toggleGetSetCtxMenu([], false);
             }
