@@ -1,0 +1,308 @@
+.cw-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #202020;
+  touch-action: none;
+}
+
+.cw-root #cw-container {
+  position: absolute;
+  inset: 0;
+}
+
+/* floating "+" add-node button — a reliable touch entry point for the add-node menu,
+   independent of whether long-press→contextmenu fires on this browser/OS */
+.cw-add-btn {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #e85d04;
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.slider-icon {
+  /* a sibling of #left-panel (not a child) in the markup — otherwise it would move
+     off-screen along with the panel's own translateX when closed */
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 1.1rem;
+  z-index: 41;
+}
+
+.slider-icon div {
+  transition: transform 0.15s ease;
+}
+
+.slider-icon-closed {
+  transform: rotate(90deg);
+}
+
+#left-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(280px, 82vw);
+  background: #181818;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+  transform: translateX(0);
+  transition: transform 0.15s ease;
+  z-index: 30;
+  padding: 3.2rem 0.8rem 1rem;
+  box-sizing: border-box;
+}
+
+/* starts with this class in markup so the panel is closed by default on a narrow screen;
+   LeftPanel.js's slide-left-panel handler just toggles the class, no JS changes needed */
+#left-panel.closed-left-panel {
+  transform: translateX(-100%);
+}
+
+.left-panel-tab {
+  position: relative;
+  padding: 0.8rem 0.6rem;
+  background: #232323;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.left-panel-tab-content {
+  padding: 0.6rem 0.2rem;
+}
+
+.left-panel-tab-content.hidden {
+  display: none;
+}
+
+#create-variables .input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+#create-variables .icon2 {
+  width: 56px;
+  flex-shrink: 0;
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+#create-variables input,
+#create-variables select {
+  flex: 1;
+  min-height: 44px;
+  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+  background: #111;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+#create-btn {
+  display: block;
+  width: 100%;
+  margin-top: 0.8rem;
+  min-height: 44px;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+#variable-list {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+}
+
+.left-panel-variable {
+  padding: 0.7rem;
+  margin: 0 0 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- context menu (add node) --- */
+#ctx-menu-container {
+  position: fixed;
+  z-index: 50;
+  background: #181818;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  max-height: min(70vh, 520px);
+  width: min(260px, 86vw);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#ctx-search-bar {
+  min-height: 44px;
+  font-size: 1rem;
+  padding: 0.5rem 0.7rem;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #333;
+  box-sizing: border-box;
+}
+
+#context-menu {
+  overflow-y: auto;
+  padding: 0.3rem;
+}
+
+#context-menu hr {
+  border-color: #333;
+  margin: 0.3rem 0;
+}
+
+.context-menu-items {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.7rem;
+  color: #eee;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+.context-menu-items:active {
+  background: #333;
+}
+
+/* --- delete / get-set popups --- */
+#delete-ctx-container,
+#get-set-ctx-menu-container {
+  position: fixed;
+  z-index: 50;
+  background: #181818;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+#delete-ctx-container {
+  padding: 0.6rem 0.9rem;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ff6b6b;
+}
+
+#get-set-ctx-menu .context-menu-items {
+  min-width: 100px;
+}
+
+/* --- inline value editors (overlaid HTML inputs for Konva InputBox) --- */
+.ipn,
+.ips,
+.ipb {
+  position: fixed;
+  display: none;
+  z-index: 60;
+  font-size: 1rem;
+  min-height: 32px;
+  padding: 0.2rem 0.4rem;
+  background: #111;
+  color: #fff;
+  border: 2px solid #e85d04;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transform-origin: top left;
+}
+
+/* Pinned near the top, not next to the input itself — the input can be anywhere on the
+   canvas (including wherever the phone's own keyboard is about to cover), but this button
+   has to stay reachable regardless of where that is or what the keyboard's dismiss key does. */
+#value-editor-done {
+  position: fixed;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 65;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #2d6a4f;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* --- alert box --- */
+.sidebox {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.sidebox-flex {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1rem;
+  min-width: 240px;
+  max-width: 86vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.sidebox .icon {
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: #e85d04;
+  color: #fff;
+  font-size: 0.95rem;
+}

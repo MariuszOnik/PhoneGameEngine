@@ -6,6 +6,18 @@
   width: 100%;
 }
 
+/* The node-graph editor needs the vertical space our custom keyboard would otherwise take,
+   and its own text inputs (search bar, variable name/value) pop the phone's own keyboard
+   anyway, so our keyboard panel is just redundant screen real estate there. */
+.split-shell.keyboard-collapsed {
+  grid-template-rows: 1fr 0 0;
+}
+
+.split-shell.keyboard-collapsed .split-divider,
+.split-shell.keyboard-collapsed .split-pane--bottom {
+  display: none;
+}
+
 .split-pane {
   display: flex;
   flex-direction: column;

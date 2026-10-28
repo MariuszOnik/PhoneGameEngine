@@ -28,6 +28,19 @@ const API_SECTIONS: ApiHelpSection[] = [
     ],
   },
   {
+    title: "Node Graph",
+    items: [
+      "\"Node Graph\" tab — visual alternative to writing onUpdate by hand, compiles to the same code",
+      "Tap the orange + button (or long-press empty canvas) to open the add-node menu; drag from a pin to wire two nodes",
+      "\"Update\" is the required entry point — like Unity's Update(), it fires every frame (not just once at the start)",
+      "White triangular pins are execution order; colored round pins are data (number/boolean/string)",
+      "Avoid While/For loops that don't terminate within a frame — there's no separate game-loop node, \"Update\" firing each frame already is your game loop",
+      "\"DeltaTime\" node outputs dt; \"FillRect\" node calls ctx.fillRect with its X/Y/Width/Height/Color inputs",
+      "☰ button (top-left) opens the variable panel — create a variable there, then find \"Get\"/\"Set\" entries for it in the add-node menu",
+      "▶ Run compiles whichever tab (Code or Node Graph) you last edited",
+    ],
+  },
+  {
     title: "Console",
     items: [
       "console.log/warn/error(...) — output appears in the panel below the canvas",

@@ -19,10 +19,11 @@ pierwszego nieoznaczonego ✅ etapu w sekcji "Etapy i commity" poniżej.
 - **Edytor kodu:** CodeMirror 6 (dobre wsparcie mobile/touch, lekki, rozszerzalny).
 - **Klawiatura:** własna wirtualna klawiatura (nie systemowa) — pełna kontrola nad layoutem,
   dotykiem i skrótami (nawiasy, tab, strzałki, undo).
-- **Node-graph (visual scripting, styl Bolt/Blueprints):** LiteGraph.js — renderuje na Canvas 2D,
-  lekki, dobre gesty touch, sprawdzony w produkcji (ComfyUI). Budowany **równolegle** z MVP
-  edytora kodu (nie jako osobny późniejszy etap), jako alternatywny/dodatkowy panel, który
-  kompiluje graf do JS/TS.
+- **Node-graph (visual scripting, styl Bolt/Blueprints):** ~~LiteGraph.js~~ **porzucone** — biblioteka
+  ma w kodzie dosłowny komentarz „touch not in production and not ready", zero realnej obsługi
+  dotyku. Zamiast tego: **fork `reference/CodeWire`** (MIT, silnik Konva.js) przeniesiony do
+  `src/nodegraph/codewire/`, z łatkami pod dotyk (patrz Etap 5 niżej). Budowany **równolegle**
+  z MVP edytora kodu, jako alternatywny/dodatkowy panel, który kompiluje graf do JS/TS.
 - **Stos technologiczny:** Vite + TypeScript, zero ciężkiego frameworka UI (React/Vue) na start —
   mobile-first, minimalny narzut. Do rozważenia później, jeśli UI się rozrośnie.
 - **Persystencja:** IndexedDB (projekty/skrypty jako "kartridże").
@@ -51,10 +52,47 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
       etapie, który poszerza API (5. node-graph, 8. scene/object model), żeby ściąga nie
       wyszła z synchronizacji z tym, co faktycznie jest dostępne w skrypcie.
       Commit: `feat: API cheatsheet key`
-- [ ] **5. Node-graph panel (LiteGraph.js)** — osadzenie LiteGraph jako alternatywnego panelu
-      edycji, podstawowe własne typy węzłów (np. `onUpdate`, `moveSprite`, `ifCondition`),
-      kompilator grafu → fragment JS/TS wstrzykiwany do runtime z etapu 4.
-      Commit: `feat: node-graph editor with JS codegen`
+- [ ] **5. Node-graph panel (fork CodeWire)** — **kod gotowy, NIEZACOMMITOWANY jeszcze**
+      (`git status` czysty od commita `21ec52e` — całość poniżej leży w working tree).
+      Przed commitem: ostatnia runda testów na telefonie (patrz niżej) i `git add`/`git commit`.
+
+      **Co zrobione:**
+      - Próba 1 (LiteGraph.js) porzucona — zero obsługi dotyku w bibliotece, patrz wyżej.
+      - Fork `reference/CodeWire` → `src/nodegraph/codewire/core/*.js` (silnik: Nodes, Wiring,
+        ContextMenu, Delete, InputBox, VisualScriptToJavascript, Variable, LeftPanel — plain JS,
+        `allowJs`/`checkJs:false` dodane w `tsconfig.json` żeby `.ts` mogło je importować bez
+        próby ich typowania). Wejście: `src/nodegraph/codewire/mobileGraphEditor.ts`,
+        zamontowane w zakładce „Node Graph" z `splitLayout.ts`.
+      - Konva.js wektorowany jako `public/vendor/konva.min.js`, ładowany classic `<script>` w
+        `index.html` PRZED `main.ts` (UMD bundle — musi być `this === window` przy wykonaniu;
+        jako ESM import tree-shake'uje się na śmierć). NIE jest zależnością npm.
+      - Usunięte: CodeMirror 5, Bootstrap/FontAwesome z CDN (PWA ma działać offline — CDN-y by to
+        zepsuły), SaveAndLoad/Export/Import (należy do Etapu 6 — persystencja).
+      - Węzeł wejściowy przemianowany `Begin`→`Update` (pasuje do `Unity.Update()` — odpala się
+        co klatkę przez istniejącą pętlę `requestAnimationFrame` w `sandboxRuntime.ts` z Etapu 4,
+        NIE raz na starcie). Kompilator (`VisualScriptToJavascript.js`) generuje teraz
+        `function onUpdate(dt) { ... }` zamiast surowego skryptu na `alert`/`console`.
+      - Nowe typy węzłów: `FillRect` (statement, `ctx.fillRect`), `DeltaTime` (expression, `dt`).
+        Z menu dodawania usunięte: Alert/Confirm/Prompt/OpenWindow/HttpRequest (nie pasują do
+        sandboxowanego iframe'u z Etapu 4).
+      - **Poprawki dotykowe** (CodeWire oryginalnie był czysto mysz-centryczny):
+        pan/pinch-zoom (`intiStage.js`, własna maszyna stanów zamiast `stage.draggable()` — ten
+        pierwszy był konfliktował z ręcznym pinch-zoom), łączenie przewodów (`Wiring.js` — było
+        wyłącznie na `mousedown`/`mousemove`/`mouseup`, dotyk w ogóle nie trafiał do tej logiki),
+        popupy (dodaj-węzeł/usuń/get-set) przycięte do widocznego ekranu (`contextMenu.js`),
+        edycja wartości węzła przez `touchend` + jawny przycisk „Gotowe" (klawiatura telefonu nie
+        zawsze odpala `blur` przy geście wstecz) (`InputBox.js`), Get/Set zmiennej przez tapnięcie
+        zamiast HTML5 drag-and-drop (fizycznie niemożliwe na dotyku) (`variable.js`). Powtarzający
+        się bug złapany 2×: listener `document.addEventListener("click", ...)` zamykający popupy
+        zamykał je w tej samej klatce co otwarcie — trzeba `stopPropagation()` na elemencie, który
+        popup otwiera.
+      - Klawiatura wirtualna (z Etapu 3) chowa się w zakładce „Node Graph" (niepotrzebna, pola
+        tekstowe grafu i tak odpalają natywną klawiaturę telefonu; zajmowała połowę ekranu).
+      - `litegraph.js` odinstalowane z npm, `public/vendor/litegraph.*` usunięte.
+
+      **Do zrobienia przed commitem:** końcowy test na telefonie całego przepływu (Update→FillRect
+      wire→Run rysuje prostokąt), potem `git add`/`git commit -m "feat: node-graph editor with JS
+      codegen"` (zgodnie z konwencją commitów etapów w tym pliku).
 - [ ] **6. Persystencja projektów** — zapis/odczyt skryptów i grafów do IndexedDB,
       lista "kartridży", przełączanie między nimi.
       Commit: `feat: project persistence via IndexedDB`

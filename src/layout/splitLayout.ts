@@ -2,6 +2,7 @@ import "./splitLayout.css";
 import { mountCodeEditor, getEditorSource } from "../editor/codeEditor";
 import { mountVirtualKeyboard } from "../keyboard/virtualKeyboard";
 import { mountRunPanel } from "../runtime/runPanel";
+import { mountMobileGraphEditor } from "../nodegraph/codewire/mobileGraphEditor";
 
 const SPLIT_STORAGE_KEY = "fc:splitRatio";
 const MIN_RATIO = 0.15;
@@ -25,9 +26,7 @@ export function mountSplitLayout(root: HTMLElement): void {
         </div>
         <div class="pane-content pane-content--editor" id="editor-pane-content">
           <div class="pane-view is-active" id="view-code"></div>
-          <div class="pane-view pane-view--padded" id="view-graph">
-            <p class="pane-placeholder">Node graph placeholder</p>
-          </div>
+          <div class="pane-view" id="view-graph"></div>
           <div class="pane-view" id="view-run"></div>
         </div>
       </section>
@@ -56,7 +55,10 @@ export function mountSplitLayout(root: HTMLElement): void {
   const viewGraph = root.querySelector<HTMLDivElement>("#view-graph")!;
   const viewRun = root.querySelector<HTMLDivElement>("#view-run")!;
   const runPanel = mountRunPanel(viewRun);
+  const graphEditor = mountMobileGraphEditor(viewGraph);
   const views: Record<string, HTMLDivElement> = { code: viewCode, graph: viewGraph, run: viewRun };
+
+  let lastEditMode: "code" | "graph" = "code";
 
   const tabs = root.querySelectorAll<HTMLButtonElement>(".pane-tab");
   tabs.forEach((tab) => {
@@ -64,8 +66,21 @@ export function mountSplitLayout(root: HTMLElement): void {
       const mode = tab.dataset.mode ?? "code";
       tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
       Object.entries(views).forEach(([key, view]) => view.classList.toggle("is-active", key === mode));
+      if (mode === "code" || mode === "graph") {
+        lastEditMode = mode;
+      }
+      shell.classList.toggle("keyboard-collapsed", mode === "graph");
       if (mode === "run") {
-        runPanel.run(getEditorSource());
+        if (lastEditMode === "graph") {
+          const { code, error } = graphEditor.getSource();
+          if (error) {
+            runPanel.showError(error);
+          } else {
+            runPanel.run(code);
+          }
+        } else {
+          runPanel.run(getEditorSource());
+        }
       } else {
         runPanel.stop();
       }

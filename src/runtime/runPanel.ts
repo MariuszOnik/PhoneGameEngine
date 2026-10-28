@@ -4,6 +4,7 @@ import { runInSandbox, type SandboxHandle, type LogEntry } from "./sandboxRuntim
 export interface RunPanel {
   run(source: string): void;
   stop(): void;
+  showError(message: string): void;
 }
 
 const MAX_LOG_LINES = 200;
@@ -57,6 +58,13 @@ export function mountRunPanel(root: HTMLElement): RunPanel {
       handle?.stop();
       handle = null;
       stopBtn.disabled = true;
+    },
+    showError(message: string): void {
+      handle?.stop();
+      handle = null;
+      stopBtn.disabled = true;
+      consoleEl.innerHTML = "";
+      appendLog({ level: "error", text: message });
     },
   };
 }
