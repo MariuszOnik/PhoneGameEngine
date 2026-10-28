@@ -43,7 +43,7 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
 - [x] **3. Własna klawiatura wirtualna** — wstawianie tekstu w pozycję kursora, klawisze
       specjalne (Tab, `{}()[]`, strzałki, Undo/Redo, Escape/zamknij).
       Commit: `feat: custom virtual keyboard`
-- [ ] **4. Runtime wykonania kodu** — przycisk "Run", sandbox (np. `Function`/iframe),
+- [x] **4. Runtime wykonania kodu** — przycisk "Run", sandbox (np. `Function`/iframe),
       minimalne API Canvas 2D udostępnione skryptowi, przechwytywanie błędów/console do UI.
       Commit: `feat: sandboxed canvas runtime`
 - [ ] **4b. Klawisz "Help" ze ściągą API** — przycisk na klawiaturze wirtualnej otwierający

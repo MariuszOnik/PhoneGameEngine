@@ -1,0 +1,49 @@
+.run-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.run-canvas-host {
+  flex: 1 1 60%;
+  min-height: 0;
+  background: #000;
+}
+
+.run-sandbox-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.run-console {
+  flex: 0 0 auto;
+  max-height: 35%;
+  overflow-y: auto;
+  background: #141414;
+  border-top: 1px solid #2a2a2a;
+  padding: 0.4rem 0.6rem;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+}
+
+.run-console-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 0.1rem 0;
+}
+
+.run-console-line--error {
+  color: #ff6b6b;
+}
+
+.run-console-line--warn {
+  color: #ffd166;
+}
+
+.run-console-line--log,
+.run-console-line--info {
+  color: #ccc;
+}

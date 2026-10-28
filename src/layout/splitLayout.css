@@ -42,6 +42,15 @@
   background: #262626;
 }
 
+.pane-tab--run {
+  color: #7ee787;
+}
+
+.pane-tab--run.is-active {
+  color: #fff;
+  background: #1f3d24;
+}
+
 .pane-content {
   flex: 1;
   min-height: 0;
@@ -52,6 +61,26 @@
 .pane-content--editor,
 .pane-content--keyboard {
   padding: 0;
+}
+
+.pane-view {
+  display: none;
+  height: 100%;
+}
+
+.pane-view.is-active {
+  display: block;
+}
+
+.pane-view--padded {
+  padding: 0.75rem;
+  box-sizing: border-box;
+}
+
+.pane-placeholder {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 .split-divider {

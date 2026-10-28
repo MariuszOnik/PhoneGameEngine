@@ -1,6 +1,7 @@
 import "./splitLayout.css";
-import { mountCodeEditor } from "../editor/codeEditor";
+import { mountCodeEditor, getEditorSource } from "../editor/codeEditor";
 import { mountVirtualKeyboard } from "../keyboard/virtualKeyboard";
+import { mountRunPanel } from "../runtime/runPanel";
 
 const SPLIT_STORAGE_KEY = "fc:splitRatio";
 const MIN_RATIO = 0.15;
@@ -20,8 +21,15 @@ export function mountSplitLayout(root: HTMLElement): void {
         <div class="pane-tabs">
           <button type="button" class="pane-tab is-active" data-mode="code">Code</button>
           <button type="button" class="pane-tab" data-mode="graph">Node Graph</button>
+          <button type="button" class="pane-tab pane-tab--run" data-mode="run">▶ Run</button>
         </div>
-        <div class="pane-content pane-content--editor" id="editor-pane-content"></div>
+        <div class="pane-content pane-content--editor" id="editor-pane-content">
+          <div class="pane-view is-active" id="view-code"></div>
+          <div class="pane-view pane-view--padded" id="view-graph">
+            <p class="pane-placeholder">Node graph placeholder</p>
+          </div>
+          <div class="pane-view" id="view-run"></div>
+        </div>
       </section>
       <div class="split-divider" id="split-divider" role="separator" aria-orientation="horizontal"></div>
       <section class="split-pane split-pane--bottom" id="keyboard-pane">
@@ -39,16 +47,28 @@ export function mountSplitLayout(root: HTMLElement): void {
 
   applyRatio(loadRatio());
 
-  const editorContent = root.querySelector<HTMLDivElement>("#editor-pane-content")!;
-  mountCodeEditor(editorContent);
+  const viewCode = root.querySelector<HTMLDivElement>("#view-code")!;
+  mountCodeEditor(viewCode);
 
   const keyboardContent = root.querySelector<HTMLDivElement>("#keyboard-pane-content")!;
   mountVirtualKeyboard(keyboardContent);
 
+  const viewGraph = root.querySelector<HTMLDivElement>("#view-graph")!;
+  const viewRun = root.querySelector<HTMLDivElement>("#view-run")!;
+  const runPanel = mountRunPanel(viewRun);
+  const views: Record<string, HTMLDivElement> = { code: viewCode, graph: viewGraph, run: viewRun };
+
   const tabs = root.querySelectorAll<HTMLButtonElement>(".pane-tab");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
+      const mode = tab.dataset.mode ?? "code";
       tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
+      Object.entries(views).forEach(([key, view]) => view.classList.toggle("is-active", key === mode));
+      if (mode === "run") {
+        runPanel.run(getEditorSource());
+      } else {
+        runPanel.stop();
+      }
     });
   });
 
