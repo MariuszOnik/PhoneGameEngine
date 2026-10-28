@@ -31,7 +31,7 @@ pierwszego nieoznaczonego ✅ etapu w sekcji "Etapy i commity" poniżej.
 Każdy etap = jeden lokalny commit po zweryfikowaniu, że działa (w miarę możliwości
 przetestowane w przeglądarce na symulowanym viewport telefonu).
 
-- [ ] **0. Scaffold projektu** — `git init`, Vite + TS, struktura folderów
+- [x] **0. Scaffold projektu** — `git init`, Vite + TS, struktura folderów
       (`src/editor`, `src/keyboard`, `src/runtime`, `src/nodegraph`, `src/scene`, `src/storage`).
       Commit: `chore: init project scaffold`
 - [ ] **1. Layout split-screen** — pionowy podział ekranu: góra = panel edytora
