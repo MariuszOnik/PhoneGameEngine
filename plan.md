@@ -67,6 +67,17 @@ przetestowane w przeglądarce na symulowanym viewport telefonu).
       przykładowa gra demo jako szablon startowy.
       Commit: `chore: polish and sample project`
 
+## Otwarte pytania (do rozstrzygnięcia, jeszcze nie zaplanowane jako etap)
+- **Wczytywanie grafiki** — jak obrazki/sprite'y trafiają do sandboksa gry (upload z telefonu?
+  wbudowana biblioteka grafik? IndexedDB jako storage assetów?) i jak je eksponujemy w API
+  skryptu (np. `loadImage()` / preload przed `Run`). Prawdopodobnie wiąże się z Etapem 6
+  (persystencja), ale wymaga osobnej decyzji co do formatu i API.
+- **Pakowanie gier jako paczek do wymiany z innymi graczami** — format eksportu całego projektu
+  (kod/graf + assety) do jednego pliku, który inny użytkownik aplikacji może zaimportować i
+  uruchomić u siebie. To coś więcej niż punkt "Eksport projektu" niżej (backup/sync między
+  własnymi urządzeniami) — tu chodzi o wymianę międzyludzką, więc potrzebny format/kontener i
+  sposób importu.
+
 ## Co dalej (poza zakresem MVP, do rozważenia później)
 - Warstwa 3D (Three.js/Babylon) jako opcjonalny tryb renderowania.
 - Eksport projektu do pliku / współdzielenie między urządzeniami.
