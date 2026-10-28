@@ -1,0 +1,76 @@
+.split-shell {
+  --split-ratio: 50%;
+  display: grid;
+  grid-template-rows: var(--split-ratio) 12px 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.split-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.split-pane--top {
+  background: #1a1a1a;
+}
+
+.split-pane--bottom {
+  background: #161616;
+}
+
+.pane-tabs {
+  display: flex;
+  flex: 0 0 auto;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.pane-tab {
+  flex: 1;
+  padding: 0.6rem 0.5rem;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.pane-tab.is-active {
+  color: #fff;
+  background: #262626;
+}
+
+.pane-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+.pane-placeholder {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.split-divider {
+  flex: 0 0 auto;
+  background: #333;
+  touch-action: none;
+  cursor: row-resize;
+  position: relative;
+}
+
+.split-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 4px;
+  background: #666;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}

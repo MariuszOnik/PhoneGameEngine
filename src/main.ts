@@ -1,4 +1,5 @@
 import "./style.css";
+import { mountSplitLayout } from "./layout/splitLayout";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<h1>PhoneGameEngine</h1><p>Scaffold OK.</p>`;
+mountSplitLayout(app);
